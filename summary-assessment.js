@@ -58,8 +58,15 @@ function each(coll, f) {
   //solve it using the most appropriate helper functions(reduce,each,map,filter).
   //wordLengths("hello its me") // [5,3,2]
   
+  
+  // TODO: your code here
+  // I use split to make new array of words and then i use map to get every length in that array
   function wordLengths(str) {
-      // TODO: your code here 
+    
+    var arrayOfWords = str.split(' ');
+    return map(arrayOfWords, function(elem) {
+    	return elem.length;
+    });
   }
   
   //=============================================================================
@@ -71,8 +78,16 @@ function each(coll, f) {
   // countOccurrences("hello", "l"); // 2
   // countOccurrences("hello, world!", "l"); // 3
   
+  
+  // I use split to make new array of charaters and i use filter to select only the same character
+  // then i return the length of that array
   function countOccurrences(string, character) {
-      // your code is here
+     
+    var arrayOfCharacter = string.split('');
+    return filter(arrayOfCharacter, function(elem) {
+    	return elem === character;
+    }).length;
+
   }
   
   //=============================================================================
@@ -83,8 +98,15 @@ function each(coll, f) {
   //solve it using the most appropriate helper functions(reduce,each,map,filter).
   // wordsLongerThanThree("Hello Mad World") //["Hello", "World"]
   
+
+  // creat an array of words and then i use filter to return the elements 
+  // that are longer than 3
   function wordsLongerThanThree(str) {
-      // TODO: your code here 
+    // TODO: your code here
+    var arrayOfWords = str.split(' ');
+    return filter(arrayOfWords, function(elem) {
+    	return elem.length > 3;
+    });
   }
   
   //=============================================================================
@@ -98,8 +120,14 @@ function each(coll, f) {
   //repeatString('dog', 2); // => 'dog' + 'dog' => 'dogdog' 
   //repeatString('dog', 3); // => 'dog' + 'dog' + 'dog' => 'dogdogdog'
   
-  function repeatString(str, count) { 
-   // TODO: your code here 
+
+  // if count is negative or equal to 0 retrun empty string 
+  // else  do it again with count - 1
+  function repeatString(str, count) {  
+    if(count <= 0) {
+    	return '';
+    }
+    return str + repeatString(str, count - 1);
   } 
    
   
@@ -129,6 +157,43 @@ function each(coll, f) {
   // pizza.eatSlice();
   
   // Write your code here .....
+
+  // i think this one is self explained
+  function makePizza(crust, size, numberOfSlice) {
+  	var ingredients = [];
+  	var addIngredients = function(ingredient) {
+  		ingredients.push(ingredient);
+  	}
+
+  	var displayIngredients =  function(){
+  		return "The ingredients are: " + ingredients.join(',');
+  	}
+
+  	var bakePizza = function() {
+  		setTimeout(function(){
+				console.log( "Your " + crust + " " + size + " " + numberOfSlice + " slice pizza is done");
+			}, 2000); 
+  	}
+
+  	var eatSlice = function() {
+  		if(numberOfSlice > 0) {
+				numberOfSlice -= 1;
+			} else {
+				return "your slice is over..";
+			}
+  	}
+
+  	return {
+  		addIngredients: addIngredients,
+  		displayIngredients: displayIngredients,
+  		bakePizza: bakePizza,
+  		eatSlice: eatSlice	
+  	}
+
+  }
+  
+
+
   
   //=============================================================================
   /*                                  Q6                                      */
@@ -151,10 +216,35 @@ function each(coll, f) {
   c- Change the "currentRead" to be the first book from "toRead" array
   d- Decrement the number of "unread" books
   */
-  
+
   // Now, to make sure that you are actually reading, make a comment below this and type: Yes I am
-  
+  // Yes I am
   // Write your code here .....
+
+
+  
+  function ReadingList() {
+  	obj = {
+	  	read: 0,
+	  	unRead: 0,
+	  	toRead: [],
+	  	currentRead: "",
+	  	readBooks: [],
+	  	AddBook: function(bookName) {
+  			this.toRead.push(bookName);
+  			this.unRead += 1;
+  			return bookName + ' added';
+  		},
+	  	finishCurrentBook: function() {
+	  		this.readBooks.push(this.currentRead);
+	  		this.read += 1;
+	  		this.toRead.unshift(this.currentRead)
+	  		this.unRead -= 1;
+  		}
+  	};
+  	
+  	return obj;
+  }
   
   //=============================================================================
   /*                                  Q7                                       */
@@ -175,6 +265,37 @@ function each(coll, f) {
   //  safe('money','small') => "watch gold-bar money"
   
   // Write your code here .....
+
+  // i creat a function inside makeSafe function 
+  // at first i change itemSize to integer i abstracet that integer from 
+  // the initial value if its equal 0 return the items 
+  // i use slice to delete the last space
+  function makeSafe(integer) {
+  	var initial = integer;
+  	var integerSize = 0;
+  	var returnMesseg = ''
+  	function addItem(item, itemSize) {
+  		if(itemSize === 'big') {
+  			integerSize = 3;
+  		} else if(itemSize === 'medium') {
+  			integerSize = 2;
+  		} else if(itemSize === 'small') {
+  			integerSize = 1;
+  		}
+  		if(initial - integerSize === 0) {
+  			initial -=  integerSize;
+  			returnMesseg += item + ' '
+  			return returnMesseg.slice(0, returnMesseg.length-1);
+  		} else if(initial - integerSize > 0) {
+  			initial -=  integerSize;
+  			returnMesseg += item + ' ';
+  		} else if(initial - integerSize < 0) {
+  			return "Can't fit";
+  		}
+  	}
+
+  	return addItem;
+  }
   
   //=============================================================================
   /*                                  Q8                                       */
@@ -216,10 +337,16 @@ function each(coll, f) {
   //================================================================================
   // Theoretical questions.
   // 1- In your own words,Why do we use Closures ?
-  
+  // We use Closures because it's the best practice we shouldn't use global variables.
+
   // 2- In OOP, what does "this" refer to ?
-  
+  // "this" in OOP refer to this object.
+
   // 3- What is jQuery?
-  
+  // jQuery is a javascript librarie
+
+
   // 4- what is the diffrence between Closure's methods and The OOP's methods?
+  //  the diffrence between Closure's methods and The OOP's methods is that OOP methods can be used 
+  // multiple times
   
